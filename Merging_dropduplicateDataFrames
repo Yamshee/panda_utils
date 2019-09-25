@@ -1,0 +1,30 @@
+import sys
+from io import StringIO
+import pandas as pd
+
+import pandas as pd
+df1 = pd.DataFrame(data={'Text':["Tax Invoice No","Date","Customer PO #","Our Reference","Shipped Date","Shipment Number","Payment Terms","Incoterms","Currency"],
+                        'Value':["2021104/49","19-Sep-2019","2400005753","26906","19-Sep-2019","6411272","90 DAYS CREDIT","Cost and Freight","AED"]})
+#print (df1)
+
+df2 = pd.DataFrame(data={'Confidence Value':[96,95,96,96,96,95,96,95],
+                    'Text':["19-Sep-2019","2400005753","26906","19-Sep-2019","6411272","90 DAYS CREDIT","Cost and Freight","AED"]})
+df2.columns=['Confidence Value','Value']
+
+#print(df2)
+
+df=pd.merge( df1,df2, on='Value',how='outer')
+#df=df.drop_duplicates(keep=False)
+
+
+#get all the nan
+df=df[df.isnull().any(axis=1)]
+#print(df)
+
+#appending row in  the dataframe
+for i,r in df.T.iteritems():
+    print(r['Value'])
+    s = pd.Series([0,r['Value']], index=df2.columns)
+    df2=df2.append(s, ignore_index=True)
+
+print(df2)
